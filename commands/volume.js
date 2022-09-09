@@ -24,6 +24,8 @@ module.exports = {
           { name: '1000%', value: '10' },
           { name: '5000%', value: '50' },
           { name: '10000%', value: '100' },
+          { name: '50000%', value: '500' },
+          { name: '100000%', value: '1000' },
         )),
   async execute(interaction, {
     player,
