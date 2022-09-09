@@ -11,8 +11,16 @@ module.exports = {
         .setDescription('The gif category')
         .setRequired(true)
         .addChoices(
-          { name: 'Test', value: 'test.mp3' },
-          { name: 'Nigra', value: 'Nigra.mp3' },
+          { name: 'Acqua', value: 'test.mp3' },
+          { name: 'Scream', value: 'Nigra.mp3' },
+          { name: 'Canzone Gatto', value: 'Gatto.mp3' },
+          { name: 'Vaffanchiulo', value: 'Vaffanchiulo.mp3' },
+          { name: 'Lucia', value: 'Lucia.mp3' },
+          { name: 'Andrea', value: 'euno.mp3' },
+          { name: 'Catafratto', value: 'catafratto.mp3' },
+          { name: 'Esplodo', value: 'esplodo.mp3' },
+          { name: 'Ai se ti piego', value: 'ai-se-ti-piego.mp3' },
+          { name: 'Comunismo', value: 'comunismo.mp3' },
         )),
   async execute(interaction, {
     player,
