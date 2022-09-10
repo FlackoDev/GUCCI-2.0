@@ -2,7 +2,7 @@ require('dotenv').config()
 
 // Funzioni da fare prossimamente: Skip ( stoppa la musica ma non esce il bot (Oppure eventualmente valutare queue)); 
 
-const { Client, GatewayIntentBits, Routes, Collection } = require('discord.js');
+const { Client, GatewayIntentBits, Routes, Collection, ActivityType, Message, Embed  } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -20,7 +20,19 @@ let resource;
 
 // When the client is ready, run this code (only once)
 client.once('ready', () => {
-	console.log('Ready!');
+	console.log('Pronto!');
+	//Type può essere numerico oppure può essere attribuito una proprietà
+	/* 	Attributi: 
+		ActivityType.Competing	5
+		ActivityType.Listening	2
+		ActivityType.Playing	0
+		ActivityType.Streaming	1
+		ActivityType.Watching	3
+	*/
+	client.user.setPresence({
+		activities: [{ name: `Ad essere il migliore 👌`, type: ActivityType.Playing }],
+		status: 'dnd',
+	});
 });
 
 client.commands = new Collection();
