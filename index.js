@@ -2,11 +2,11 @@ require('dotenv').config()
 
 // Funzioni da fare prossimamente: Skip ( stoppa la musica ma non esce il bot (Oppure eventualmente valutare queue)); 
 
-const { Client, GatewayIntentBits, Routes, Collection, ActivityType, Message, Embed  } = require('discord.js');
+const { Client, GatewayIntentBits, Routes, Collection, ActivityType } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const fs = require('node:fs');
 const path = require('node:path');
-const token = process.env.TOKEN; 
+const token = process.env.TOKEN;
 const clientId = process.env.CLIENTID
 const guildId = process.env.GUILDID
 const { createAudioPlayer } = require('@discordjs/voice');
@@ -19,7 +19,13 @@ let connection;
 let resource;
 
 // When the client is ready, run this code (only once)
-client.once('ready', () => {
+client.once('ready', async () => {
+	// Aggiorno slash commands per ogni server (guild)
+	const guilds = await client.guilds.fetch()
+	guilds.map((a) => {
+		loadSlash(a.id)
+	})
+
 	console.log('Pronto!');
 	//Type può essere numerico oppure può essere attribuito una proprietà
 	/* 	Attributi: 
@@ -46,29 +52,7 @@ for (const file of commandFiles) {
 	client.commands.set(command.data.name, command);
 }
 
-// Aggiornare i comandi slash
-(async () => {
-	try {
-		const commands = [];
-
-		for (const cmd of client.commands.toJSON()) {
-			commands.push(cmd.data)
-		}
-
-		console.log(`Started refreshing ${commands.length} application (/) commands.`);
-
-		const data = await rest.put(
-			Routes.applicationGuildCommands(clientId, guildId),
-			{ body: commands },
-		);
-
-		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
-	} catch (error) {
-		console.error(error);
-	}
-})();
-
-// Aggiungere l'ascolto all'evento     
+// Aggiungere l'ascolto all'evento
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isChatInputCommand()) return;
 
@@ -94,5 +78,29 @@ client.on('interactionCreate', async interaction => {
 	}
 });
 
+client.on("guildCreate", (guild) => loadSlash(guild.id))
+
 // Login to Discord with your client's token
 client.login(token);
+
+
+async function loadSlash(guildIdA) {
+	try {
+		const commands = [];
+
+		for (const cmd of client.commands.toJSON()) {
+			commands.push(cmd.data)
+		}
+
+		console.log(`Started refreshing ${commands.length} application (/) commands.`);
+
+		const data = await rest.put(
+			Routes.applicationGuildCommands(clientId, guildIdA),
+			{ body: commands },
+		);
+
+		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+	} catch (error) {
+		console.error(error);
+	}
+}
